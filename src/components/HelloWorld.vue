@@ -64,7 +64,8 @@ export default {
   // Fetches posts when the component is created.
   created() {
     axios
-      .get(`http://127.0.0.1:8000/api/todos/`)
+      // .get(`http://127.0.0.1:8000/api/todos/`)
+      .get(`https://apitodosang.herokuapp.com/api/todos/`)
       .then((response) => {
         this.items = response.data;
       })
