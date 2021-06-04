@@ -1,57 +1,49 @@
 <template>
-  <v-list-item>
-    <template>
-      <v-list-item-content>
-        <v-list-item-title v-text="item.title"></v-list-item-title>
-        <v-list-item-subtitle v-text="item.description"></v-list-item-subtitle>
-      </v-list-item-content>
-      <v-list-item-action>
-        <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
-        <v-icon
-          v-if="item.completed"
-          @click="check(item)"
-          color="green lighten-1"
-        >
-          mdi-checkbox-marked-circle
-        </v-icon>
-        <v-icon v-else color="grey darken-3" @click="check(item)">
-          mdi-checkbox-marked-circle
-        </v-icon>
-        <v-icon color="red darken-3" @click="deleteicon(item)">
-          mdi-minus-circle
-        </v-icon>
-      </v-list-item-action>
-    </template>
-  </v-list-item>
-</template>
+  <v-form v-model="valid">
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="4">
+          <v-text-field
+            v-model="title"
+            :rules="nameRules"
+            :counter="100"
+            label="Title"
+            required
+          ></v-text-field>
+        </v-col>
 
+        <v-col cols="12" md="6">
+          <v-text-field
+            v-model="description"
+            :rules="nameRules"
+            :counter="100"
+            label="Description"
+            required
+          ></v-text-field>
+        </v-col>
+        <v-col @click="add"> Add </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
+</template>
 <script>
 import axios from "axios";
 export default {
-  props: ["item"],
-
+  data: () => ({
+    valid: false,
+    title: "",
+    description: "",
+    nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => v.length <= 50 || "Name must be less than 50 characters",
+    ],
+  }),
   methods: {
-    lay() {
-      axios
-        .get(`https://apitodosang.herokuapp.com/api/todos/`)
-        .then((response) => {
-          this.items = response.data;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
-    },
-    check(item) {
-      item.completed = !item.completed;
-      axios
-        .put(`https://apitodosang.herokuapp.com/api/todos/${item.id}/`, item)
-        .then(() => this.lay());
-    },
-    deleteicon(item) {
-      item.completed = !item.completed;
-      axios
-        .delete(`https://apitodosang.herokuapp.com/api/todos/${item.id}/`, item)
-        .then(() => this.lay());
+    add() {
+      let item = { title: this.title, description: this.description };
+      this.title = "";
+      this.description = "";
+      axios.post(`https://apitodosang.herokuapp.com/api/todos/`, item).then();
     },
   },
 };
