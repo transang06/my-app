@@ -17,42 +17,24 @@
     </v-toolbar>
 
     <v-list two-line>
-      <v-list-item-group v-model="selected" active-class="pink--text" multiple>
-        <template v-for="(item, index) in items">
-          <v-list-item :key="item.title">
-            <template v-slot:default="{ active }">
-              <v-list-item-content>
-                <v-list-item-title v-text="item.title"></v-list-item-title>
-
-                <v-list-item-subtitle
-                  v-text="item.description"
-                ></v-list-item-subtitle>
-              </v-list-item-content>
-
-              <v-list-item-action>
-                <v-list-item-action-text
-                  v-text="item.action"
-                ></v-list-item-action-text>
-
-                <v-icon v-if="!active" color="grey lighten-1">
-                  mdi-star-outline
-                </v-icon>
-
-                <v-icon v-else color="yellow darken-3"> mdi-star </v-icon>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-
-          <v-divider v-if="index < items.length - 1" :key="index"></v-divider>
-        </template>
+      <v-list-item-group>
+        <Item
+          v-for="(item, index) in items"
+          :key="index"
+          :class="{ 'teal lighten-4': item.completed }"
+          :item="item"
+        ></Item>
       </v-list-item-group>
     </v-list>
   </v-card>
 </template>
 <script>
 import axios from "axios";
-
+import Item from "./Item.vue";
 export default {
+  components: {
+    Item,
+  },
   data() {
     return {
       items: [],
@@ -60,18 +42,20 @@ export default {
       errors: [],
     };
   },
-
-  // Fetches posts when the component is created.
   created() {
-    axios
-      // .get(`http://127.0.0.1:8000/api/todos/`)
-      .get(`https://apitodosang.herokuapp.com/api/todos/`)
-      .then((response) => {
-        this.items = response.data;
-      })
-      .catch((e) => {
-        this.errors.push(e);
-      });
+    this.lay();
+  },
+  methods: {
+    lay() {
+      axios
+        .get(`https://apitodosang.herokuapp.com/api/todos/`)
+        .then((response) => {
+          this.items = response.data;
+        })
+        .catch((e) => {
+          this.errors.push(e);
+        });
+    },
   },
 };
 </script>
