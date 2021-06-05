@@ -108,7 +108,7 @@ export default {
   methods: {
     lay() {
       axios
-        .get(`https://apitodosang.herokuapp.com/api/todos/`)
+        .get(`https://shilim.herokuapp.com/api/todos/`)
         .then((response) => {
           this.items = response.data;
         })
@@ -121,7 +121,7 @@ export default {
       this.title = "";
       this.description = "";
       axios
-        .post(`https://apitodosang.herokuapp.com/api/todos/`, item)
+        .post(`https://shilim.herokuapp.com/api/todos/`, item)
         .then(() => {
           this.lay();
           this.tbs.unshift("Thêm thanh cong");
@@ -130,7 +130,7 @@ export default {
     check(item) {
       item.completed = !item.completed;
       axios
-        .put(`https://apitodosang.herokuapp.com/api/todos/${item.id}/`, item)
+        .put(`https://shilim.herokuapp.com/api/todos/${item.id}/`, item)
         .then(() => {
           this.lay();
           this.tbs.unshift("Thay đổi thanh cong");
@@ -138,7 +138,7 @@ export default {
     },
     deleteicon(item) {
       axios
-        .delete(`https://apitodosang.herokuapp.com/api/todos/${item.id}/`, item)
+        .delete(`https://shilim.herokuapp.com/api/todos/${item.id}/`, item)
        .then(() => {
           this.lay();
           this.tbs.unshift("Xóa thanh cong");
